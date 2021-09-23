@@ -38,7 +38,7 @@ public class UserData {
         @JsonProperty("can_impression")
         private Integer canImpression;
         @JsonProperty("dating_list")
-        private List<?> datingList;
+        private List<String> datingList;
         @JsonProperty("dynamics_list")
         private List<DynamicsListDTO> dynamicsList;
         @JsonProperty("annual_income")

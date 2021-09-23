@@ -2,17 +2,15 @@ package com.reptile.main;
 
 import com.alibaba.fastjson.JSONObject;
 import com.reptile.dao.UserDao;
-import com.reptile.entity.UserActivityData;
-import com.reptile.entity.UserData;
-import com.reptile.entity.UserEntity;
-import com.reptile.entity.UserListData;
-import com.reptile.utils.DateUtils;
+import com.reptile.dao.UserHeartDao;
+import com.reptile.dao.UserReptileDao;
+import com.reptile.entity.*;
 import com.reptile.utils.HttpUtils;
 import com.reptile.utils.JdbcUtils;
 import org.apache.commons.lang.StringUtils;
 
+import java.net.URLEncoder;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,76 +23,62 @@ public class ReptileUserData {
 
     static String token = "3ebdd9b4713102643a352fbf0c94eae6";
     static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
+    static String city = "深圳";
 
     public static void main(String[] args) throws Exception {
-        getUserActivity("");
         Connection conn = JdbcUtils.getBoomConnection();
-        List<UserEntity> userList = UserDao.getAllUserList(conn);
+        List<UserReptileEntity> allUserList = UserReptileDao.getAllUserList(conn);
 
-        for (int m = 20; m < 50; m++) {
+        // 1.爬取主页数据
+        List<UserData.DataDTO> list = new ArrayList<UserData.DataDTO>();
+        for (int m = 1; m < 1000; m++) {
             List<UserListData.DataDTO> homeList = getHomeList(m);
-            List<UserData.DataDTO> list = new ArrayList<UserData.DataDTO>();
             for (int i = 0; i < homeList.size(); i++) {
                 String userId = homeList.get(i).getUserId();
-                UserData.DataDTO userMsg = getUserMsg(userId);
-                if (!isContain(userList, userMsg.getWechat())) {
-                    if (StringUtils.isNotBlank(userMsg.getWechat())) {
-                        list.add(userMsg);
+                if (!isContain(allUserList, userId)) {
+                    // 过滤掉已经爬取过的数据
+                    UserData.DataDTO userMsg = getUserMsg(userId);
+                    List<String> datingList = userMsg.getDatingList();
+                    if (datingList != null && datingList.size() > 0) {
+                        // 过滤掉没有活动的数据
+                        if (userMsg.getShowWechat() == 0 && StringUtils.isNotBlank(userMsg.getWechat())) {
+                            String userWeChat = getUserWeChat(userId);
+                            userMsg.setWechat(userWeChat);
+                            if (StringUtils.isNotBlank(userMsg.getWechat())) {
+                                list.add(userMsg);
+                                UserReptileDao.insert(conn, Integer.valueOf(userId));
+                                if (list.size() >= 10) {
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
-            insertUserData(list, userList, conn);
-            JdbcUtils.execute(conn, "update user set  username = concat('a',100000 + id)  where username is null ");
-            // 更新用户活动信息
+            if (list.size() >= 10) {
+                break;
+            }
+        }
+        // 更新用户数据
+        UserDao.insertUserData(list, conn);
+        JdbcUtils.execute(conn, "update user set  username = concat('a',100000 + id)  where username is null ");
+        // 更新用户心跳数据
+        List<UserEntity> userList = UserDao.getSZUserList(conn);
+        UserHeartDao.updateSzUserHeartData(userList, conn);
+        // 更新活动数据
+        for (int i = 0; i < userList.size(); i++) {
+
 
         }
+
+
         JdbcUtils.closeBoom();
     }
 
-    public static void insertUserData(List<UserData.DataDTO> list, List<UserEntity> userList, Connection conn) throws Exception {
-        String sql = "insert  into  user (nickname,avatarurl,gender,birth,height,weight,photos,vip_level,vip_end,city,self_desc,profession,salary_year,wechat_account,flags) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        if (list != null && list.size() > 0) {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.clearBatch();
-            for (int i = 0; i < list.size(); i++) {
-                UserData.DataDTO user = list.get(i);
-                ps.setObject(1, user.getNickName());
-                ps.setObject(2, user.getAvatar());
-                ps.setObject(3, user.getSex() - 1);
-                ps.setObject(4, DateUtils.addDay(DateUtils.getSysDate(), (0 - user.getAge()) * 365));
-                ps.setObject(5, user.getHeight());
-                ps.setObject(6, 48);
-                ps.setObject(7, JSONObject.toJSONString(user.getPhotoList()));
-                ps.setObject(8, 1);
-                ps.setObject(9, "2021-11-01");
-                ps.setObject(10, user.getLocation());
-                ps.setObject(11, user.getSignature());
-                ps.setObject(12, user.getProfession());
-                ps.setObject(13, user.getAnnualIncome());
-                ps.setObject(14, user.getWechat());
-
-                List<UserData.DataDTO.InterestLabelDTO> interestLabel = user.getInterestLabel();
-                String flag = "";
-                for (int j = 0; j < interestLabel.size(); j++) {
-                    UserData.DataDTO.InterestLabelDTO interestLabelDTO = interestLabel.get(j);
-                    List<String> child = interestLabelDTO.getChild();
-                    for (int k = 0; k < child.size(); k++) {
-                        String s = child.get(k);
-                        flag = flag + s + ",";
-                    }
-                }
-                ps.setObject(15, flag);
-                ps.addBatch();
-            }
-            ps.executeBatch();
-            ps.close();
-        }
-    }
-
-    public static boolean isContain(List<UserEntity> list, String weChat) throws Exception {
+    public static boolean isContain(List<UserReptileEntity> list, String userId) throws Exception {
         for (int i = 0; i < list.size(); i++) {
-            String wechat = list.get(i).getWeChat();
-            if (wechat != null && wechat.equals(weChat)) {
+            Integer hUserId = list.get(i).getHUserId();
+            if (userId.equals(hUserId + "")) {
                 return true;
             }
         }
@@ -112,7 +96,7 @@ public class ReptileUserData {
         String url = "http://app.lightyeara.cn/api/index/userList";
         Map<String, Object> map = new HashMap();
         map.put("name", "circle");
-        map.put("city", "%E6%B7%B1%E5%9C%B3");
+        map.put("city", URLEncoder.encode(city));
         map.put("page", page);
         map.put("sort", 0);
         Map<String, Object> header = new HashMap();
@@ -147,14 +131,6 @@ public class ReptileUserData {
         String data = HttpUtils.doGet(url, map, token, header);
         UserData data1 = JSONObject.parseObject(data, UserData.class);
         UserData.DataDTO data2 = data1.getData();
-        Integer showWechat = data2.getShowWechat();
-        // System.out.println(data);
-        if (showWechat == 1) {
-            // 获取微信
-            System.out.println(userId);
-            getUserWeChat(userId);
-            // data2.setWechat();
-        }
         return data2;
     }
 
@@ -164,7 +140,7 @@ public class ReptileUserData {
      * @param userId
      * @return
      */
-    public static UserData.DataDTO getUserWeChat(String userId) {
+    public static String getUserWeChat(String userId) {
         String url = "http://small.onbyway.top/api/user/userWechat";
         Map<String, Object> map = new HashMap();
         map.put("to_user_id", userId);
@@ -176,8 +152,9 @@ public class ReptileUserData {
         map.put("location", "114.085947&22.547456");
 
         String data = HttpUtils.doGet(url, map, token, header);
+        UserWeChatData userWeChatData = JSONObject.parseObject(data, UserWeChatData.class);
         System.out.println(data);
-        return null;
+        return userWeChatData.getData().getWechat();
     }
 
     /**
