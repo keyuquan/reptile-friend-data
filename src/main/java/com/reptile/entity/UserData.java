@@ -19,6 +19,10 @@ public class UserData {
     @NoArgsConstructor
     @Data
     public static class DataDTO {
+        @JsonProperty("activity")
+        private   List<UserActivityData.DataDTO> activity ;
+        @JsonProperty("username")
+        private String username;
         @JsonProperty("show_wechat")
         private Integer showWechat;
         @JsonProperty("distance")

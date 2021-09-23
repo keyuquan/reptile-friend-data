@@ -1,6 +1,7 @@
 package com.reptile.main;
 
 import com.alibaba.fastjson.JSONObject;
+import com.reptile.dao.ActivityDao;
 import com.reptile.dao.UserDao;
 import com.reptile.dao.UserHeartDao;
 import com.reptile.dao.UserReptileDao;
@@ -41,9 +42,9 @@ public class ReptileUserData {
                     List<String> datingList = userMsg.getDatingList();
                     if (datingList != null && datingList.size() > 0) {
                         // 过滤掉没有活动的数据
-                        if (userMsg.getShowWechat() == 0 && StringUtils.isNotBlank(userMsg.getWechat())) {
-                            String userWeChat = getUserWeChat(userId);
-                            userMsg.setWechat(userWeChat);
+                        if (userMsg.getShowWechat() == 1){
+                            List<UserActivityData.DataDTO> userActivity = getUserActivity(userId);
+                            userMsg.setActivity(userActivity);
                             if (StringUtils.isNotBlank(userMsg.getWechat())) {
                                 list.add(userMsg);
                                 UserReptileDao.insert(conn, Integer.valueOf(userId));
@@ -52,6 +53,20 @@ public class ReptileUserData {
                                 }
                             }
                         }
+
+//                        if (userMsg.getShowWechat() == 0 && StringUtils.isNotBlank(userMsg.getWechat())) {
+//                            String userWeChat = getUserWeChat(userId);
+//                            userMsg.setWechat(userWeChat);
+//                            List<UserActivityData.DataDTO> userActivity = getUserActivity(userId);
+//                            userMsg.setActivity(userActivity);
+//                            if (StringUtils.isNotBlank(userMsg.getWechat())) {
+//                                list.add(userMsg);
+//                                UserReptileDao.insert(conn, Integer.valueOf(userId));
+//                                if (list.size() >= 10) {
+//                                    break;
+//                                }
+//                            }
+//                        }
                     }
                 }
             }
@@ -66,14 +81,26 @@ public class ReptileUserData {
         List<UserEntity> userList = UserDao.getSZUserList(conn);
         UserHeartDao.updateSzUserHeartData(userList, conn);
         // 更新活动数据
-        for (int i = 0; i < userList.size(); i++) {
-
-
-        }
-
-
+        ActivityDao.insertUserActivityData(addUserName(list, userList), conn);
         JdbcUtils.closeBoom();
     }
+
+    public static List<UserData.DataDTO> addUserName(List<UserData.DataDTO> list, List<UserEntity> userList) {
+        List<UserData.DataDTO> list2 = new ArrayList<UserData.DataDTO>();
+        for (int i = 0; i < list.size(); i++) {
+            UserData.DataDTO dataDTO = list.get(i);
+            for (int j = 0; j < userList.size(); j++) {
+                UserEntity userEntity = userList.get(j);
+                if (dataDTO.getShowWechat().equals(userEntity.getWeChat())) {
+                    dataDTO.setUsername(userList.get(j).getUsername());
+                    list2.add(dataDTO);
+                }
+            }
+        }
+
+        return list2;
+    }
+
 
     public static boolean isContain(List<UserReptileEntity> list, String userId) throws Exception {
         for (int i = 0; i < list.size(); i++) {
