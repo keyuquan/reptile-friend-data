@@ -9,6 +9,7 @@ import com.reptile.entity.*;
 import com.reptile.utils.HttpUtils;
 import com.reptile.utils.JdbcUtils;
 import org.apache.commons.lang.StringUtils;
+
 import java.net.URLEncoder;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    static String token = "3ebdd9b4713102643a352fbf0c94eae6";
+    static String token = "c0e95b922197adc7730913b4962a0160";
     static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
     static String city = "深圳";
 
@@ -41,18 +42,18 @@ public class ReptileUserData {
                     List<String> datingList = userMsg.getDatingList();
                     if (datingList != null && datingList.size() > 0) {
                         // 过滤掉没有活动的数据
-                        System.out.println(userMsg.getUserId() + "showWechat == " + userMsg.getShowWechat() + " wechat == " + userMsg.getWechat());
+                        System.out.println(userMsg.getUserId() + " showWechat == " + userMsg.getShowWechat() + " wechat == " + userMsg.getWechat());
                         String weChat = "";
                         if (userMsg.getShowWechat() == 2) {
                             // 直接显示微信
                             weChat = userMsg.getWechat();
                         } else if (userMsg.getShowWechat() == 1) {
-                            // 显示微信，但是需要请求
-                            UserWeChatData.DataDTO userWeChat = getUserWeChat(userId);
-                            if (userWeChat != null) {
-                                weChat = userWeChat.getWechat();
-                                userMsg.setWechat(weChat);
-                            }
+//                            // 显示微信，但是需要请求
+//                            UserWeChatData.DataDTO userWeChat = getUserWeChat(userId);
+//                            if (userWeChat != null) {
+//                                weChat = userWeChat.getWechat();
+//                                userMsg.setWechat(weChat);
+//                            }
                         }
                         if (StringUtils.isNotBlank(weChat)) {
                             List<UserActivityData.DataDTO> userActivity = getUserActivity(userId);
@@ -131,6 +132,7 @@ public class ReptileUserData {
         String data = HttpUtils.doGet(url, map, token, header);
         UserListData data1 = JSONObject.parseObject(data, UserListData.class);
         List<UserListData.DataDTO> list = data1.getData();
+        System.out.println(data);
         return list;
     }
 
