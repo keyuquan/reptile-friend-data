@@ -40,34 +40,38 @@ public class ReptileUserData {
                     // 过滤掉已经爬取过的数据
                     UserData.DataDTO userMsg = getUserMsg(userId);
                     List<String> datingList = userMsg.getDatingList();
-                    if (datingList != null && datingList.size() > 0) {
-                        // 过滤掉没有活动的数据
-                        System.out.println(userMsg.getUserId() + " showWechat == " + userMsg.getShowWechat() + " wechat == " + userMsg.getWechat());
-                        String weChat = "";
-                        if (userMsg.getShowWechat() == 2) {
-                            // 直接显示微信
-                            weChat = userMsg.getWechat();
-                        } else if (userMsg.getShowWechat() == 1) {
-                            // 显示微信，但是需要请求
-                            UserWeChatData.DataDTO userWeChat = getUserWeChat(userId);
-                            if (userWeChat != null) {
-                                weChat = userWeChat.getWechat();
-                                userMsg.setWechat(weChat);
+                    List<String> photoList = userMsg.getPhotoList();
+                    if (photoList != null && photoList.size() > 0) {
+
+                        if (datingList != null && datingList.size() > 0) {
+                            // 过滤掉没有活动的数据
+                            System.out.println(userMsg.getUserId() + " showWechat == " + userMsg.getShowWechat() + " wechat == " + userMsg.getWechat());
+                            String weChat = "";
+                            if (userMsg.getShowWechat() == 2) {
+                                // 直接显示微信
+                                weChat = userMsg.getWechat();
+                            } else if (userMsg.getShowWechat() == 1) {
+                                // 显示微信，但是需要请求
+                                UserWeChatData.DataDTO userWeChat = getUserWeChat(userId);
+                                if (userWeChat != null) {
+                                    weChat = userWeChat.getWechat();
+                                    userMsg.setWechat(weChat);
+                                }
                             }
-                        }
-                        if (StringUtils.isNotBlank(weChat)) {
-                            List<UserActivityData.DataDTO> userActivity = getUserActivity(userId);
-                            userMsg.setActivity(userActivity);
-                            list.add(userMsg);
-                            UserReptileDao.insert(conn, Integer.valueOf(userId));
-                            if (list.size() >= 3) {
-                                break;
+                            if (StringUtils.isNotBlank(weChat)) {
+                                List<UserActivityData.DataDTO> userActivity = getUserActivity(userId);
+                                userMsg.setActivity(userActivity);
+                                list.add(userMsg);
+                                UserReptileDao.insert(conn, Integer.valueOf(userId));
+                                if (list.size() >= 10) {
+                                    break;
+                                }
                             }
                         }
                     }
                 }
             }
-            if (list.size() >= 3) {
+            if (list.size() >= 10) {
                 break;
             }
         }
@@ -79,6 +83,9 @@ public class ReptileUserData {
         UserHeartDao.updateSzUserHeartData(userList, conn);
         // 更新活动数据
         ActivityDao.insertUserActivityData(addUserName(list, userList), conn);
+
+        JdbcUtils.execute(conn, "update user set  city = '深圳市'  where  city = '深圳' ");
+        JdbcUtils.execute(conn, "update activity set  city = '深圳市'  where  city = '深圳' ");
         JdbcUtils.closeBoom();
     }
 
