@@ -32,7 +32,6 @@ public class UserReptileDao {
             String sql = "INSERT INTO user_reptile (h_user_id) VALUES(?)  on  duplicate key update update_time=now() ";
             Object[] params = {hUserId};
             int update = new QueryRunner().update(conn, sql, params);
-            System.out.println("update="+update);
         } catch (SQLException e) {
 
         }
