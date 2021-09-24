@@ -60,14 +60,14 @@ public class ReptileUserData {
                             userMsg.setActivity(userActivity);
                             list.add(userMsg);
                             UserReptileDao.insert(conn, Integer.valueOf(userId));
-                            if (list.size() >= 10) {
+                            if (list.size() >= 3) {
                                 break;
                             }
                         }
                     }
                 }
             }
-            if (list.size() >= 10) {
+            if (list.size() >= 3) {
                 break;
             }
         }
@@ -192,7 +192,7 @@ public class ReptileUserData {
 
         String url = "http://small.onbyway.top/api/dating/user_dating_list";
         Map<String, Object> map = new HashMap();
-        map.put("other_user_id", 1333628);
+        map.put("other_user_id", userId);
         map.put("page", 1);
 
         Map<String, Object> header = new HashMap();
