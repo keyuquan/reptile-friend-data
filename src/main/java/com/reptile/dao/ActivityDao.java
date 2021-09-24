@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.reptile.entity.UserActivityData;
 import com.reptile.entity.UserData;
 import com.reptile.utils.DateUtils;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.List;
  */
 public class ActivityDao {
     public static void insertUserActivityData(List<UserData.DataDTO> list, Connection conn) throws Exception {
-        String sql = "insert into  activity(type,username,city,dest_type,time_type,time,instr,images) values (?,?,?,?,?,?,?,?)";
+        String sql = "insert into  activity(type,username,city,dest_type,time_type,time,instr,images,status) values (?,?,?,?,?,?,?,?,?)";
         if (list != null && list.size() > 0) {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.clearBatch();
@@ -34,7 +33,7 @@ public class ActivityDao {
                         ps.setObject(3, dataDTO1.getPlace());
                         ps.setObject(4, destType);
                         ps.setObject(5, timeType);
-                        ps.setObject(6, DateUtils.addDay(DateUtils.getSysDate(), 6));
+                        ps.setObject(6, DateUtils.addDay(DateUtils.getSysDate(), 10));
                         ps.setObject(7, dataDTO1.getContent());
 
                         List<UserActivityData.DataDTO.PhotoDTO> photo = dataDTO1.getPhoto();
@@ -43,6 +42,8 @@ public class ActivityDao {
                             listPhoto.add(photo.get(i).getUrl());
                         }
                         ps.setObject(8, JSONObject.toJSONString(listPhoto));
+                        ps.setObject(9,1);
+                        ps.addBatch();
                     }
                 }
             }

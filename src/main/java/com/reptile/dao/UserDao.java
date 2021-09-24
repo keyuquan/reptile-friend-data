@@ -55,7 +55,7 @@ public class UserDao {
                 ps.setObject(6, 48);
                 ps.setObject(7, JSONObject.toJSONString(user.getPhotoList()));
                 ps.setObject(8, 1);
-                ps.setObject(9, "2021-11-01");
+                ps.setObject(9, "2030-11-01");
                 ps.setObject(10, user.getLocation());
                 ps.setObject(11, user.getSignature());
                 ps.setObject(12, user.getProfession());

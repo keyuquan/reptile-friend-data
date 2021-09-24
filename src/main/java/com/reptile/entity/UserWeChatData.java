@@ -3,22 +3,22 @@ package com.reptile.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-public class UserWeChatData {
-    @JsonProperty("data")
-    private UserWeChatData.DataDTO data;
-    @JsonProperty("FlagString")
-    private String flagString;
-    @JsonProperty("Flag")
-    private Integer flag;
+public class UserWeChatData implements Serializable {
 
-    @NoArgsConstructor
+    @JsonProperty("Flag")
+    private Integer Flag;
+    @JsonProperty("FlagString")
+    private String FlagString;
+    @JsonProperty("data")
+    private DataDTO data;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Data
-    public static class DataDTO {
+    public static class DataDTO implements Serializable {
         @JsonProperty("wechat")
         private String wechat;
     }

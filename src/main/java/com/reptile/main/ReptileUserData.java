@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    static String token = "c0e95b922197adc7730913b4962a0160";
+    static String token = "5e895db913d4ee465cbbe1377631b750";
     static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
     static String city = "深圳";
 
@@ -48,26 +48,26 @@ public class ReptileUserData {
                             // 直接显示微信
                             weChat = userMsg.getWechat();
                         } else if (userMsg.getShowWechat() == 1) {
-//                            // 显示微信，但是需要请求
-//                            UserWeChatData.DataDTO userWeChat = getUserWeChat(userId);
-//                            if (userWeChat != null) {
-//                                weChat = userWeChat.getWechat();
-//                                userMsg.setWechat(weChat);
-//                            }
+                            // 显示微信，但是需要请求
+                            UserWeChatData.DataDTO userWeChat = getUserWeChat(userId);
+                            if (userWeChat != null) {
+                                weChat = userWeChat.getWechat();
+                                userMsg.setWechat(weChat);
+                            }
                         }
                         if (StringUtils.isNotBlank(weChat)) {
                             List<UserActivityData.DataDTO> userActivity = getUserActivity(userId);
                             userMsg.setActivity(userActivity);
                             list.add(userMsg);
                             UserReptileDao.insert(conn, Integer.valueOf(userId));
-                            if (list.size() >= 1) {
+                            if (list.size() >= 9) {
                                 break;
                             }
                         }
                     }
                 }
             }
-            if (list.size() >= 10) {
+            if (list.size() >= 9) {
                 break;
             }
         }
@@ -88,7 +88,7 @@ public class ReptileUserData {
             UserData.DataDTO dataDTO = list.get(i);
             for (int j = 0; j < userList.size(); j++) {
                 UserEntity userEntity = userList.get(j);
-                if (dataDTO.getShowWechat().equals(userEntity.getWeChat())) {
+                if (dataDTO.getWechat().equals(userEntity.getWeChat())) {
                     dataDTO.setUsername(userList.get(j).getUsername());
                     list2.add(dataDTO);
                 }
