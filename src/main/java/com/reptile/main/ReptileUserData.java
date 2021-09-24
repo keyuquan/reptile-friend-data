@@ -60,14 +60,14 @@ public class ReptileUserData {
                             userMsg.setActivity(userActivity);
                             list.add(userMsg);
                             UserReptileDao.insert(conn, Integer.valueOf(userId));
-                            if (list.size() >= 9) {
+                            if (list.size() >= 8) {
                                 break;
                             }
                         }
                     }
                 }
             }
-            if (list.size() >= 9) {
+            if (list.size() >= 8) {
                 break;
             }
         }
