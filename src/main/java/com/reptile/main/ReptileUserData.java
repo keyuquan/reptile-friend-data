@@ -86,6 +86,7 @@ public class ReptileUserData {
 
         JdbcUtils.execute(conn, "update user set  city = '深圳市'  where  city = '深圳' ");
         JdbcUtils.execute(conn, "update activity set  city = '深圳市'  where  city = '深圳' ");
+        JdbcUtils.execute(conn, "update user_heart set  city = '深圳市'  where  city = '深圳' ");
         JdbcUtils.closeBoom();
     }
 

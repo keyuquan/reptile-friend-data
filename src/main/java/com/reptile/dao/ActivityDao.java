@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class ActivityDao {
     public static void insertUserActivityData(List<UserData.DataDTO> list, Connection conn) throws Exception {
-        String sql = "insert into  activity(type,username,city,dest_type,time_type,time,instr,images,status) values (?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into  activity(type,username,city,dest_type,time_type,time,instr,images,status,create_time) values (?,?,?,?,?,?,?,?,?,?)";
         if (list != null && list.size() > 0) {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.clearBatch();
@@ -44,6 +44,7 @@ public class ActivityDao {
                         }
                         ps.setObject(8, JSONObject.toJSONString(listPhoto));
                         ps.setObject(9, 1);
+                        ps.setObject(10, DateUtils.addSecond(DateUtils.getSysFullDate(), 0 - (int) (Math.random() * 36000 + 1)));
                         ps.addBatch();
                     }
                 }
