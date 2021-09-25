@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.reptile.entity.UserData;
 import com.reptile.entity.UserEntity;
 import com.reptile.utils.DateUtils;
-import com.reptile.utils.JdbcUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
@@ -41,7 +40,7 @@ public class UserDao {
      * @throws Exception
      */
     public static void insertUserData(List<UserData.DataDTO> list, Connection conn) throws Exception {
-        String sql = "insert  into  user (nickname,avatarurl,gender,birth,height,weight,photos,vip_level,vip_end,city,self_desc,profession,salary_year,wechat_account,flags) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert  into  user (nickname,avatarurl,gender,birth,height,weight,photos,vip_level,vip_end,city,self_desc,profession,salary_year,wechat_account,flags,create_time) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         if (list != null && list.size() > 0) {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.clearBatch();
@@ -73,6 +72,7 @@ public class UserDao {
                     }
                 }
                 ps.setObject(15, flag);
+                ps.setObject(16, DateUtils.addSecond(DateUtils.getSysFullDate(), 0 - (int) (Math.random() * 7200 + 7201)));
                 ps.addBatch();
             }
             ps.executeBatch();

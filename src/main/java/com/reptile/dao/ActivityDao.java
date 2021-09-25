@@ -44,7 +44,7 @@ public class ActivityDao {
                         }
                         ps.setObject(8, JSONObject.toJSONString(listPhoto));
                         ps.setObject(9, 1);
-                        ps.setObject(10, DateUtils.addSecond(DateUtils.getSysFullDate(), 0 - (int) (Math.random() * 36000 + 1)));
+                        ps.setObject(10, DateUtils.addSecond(DateUtils.getSysFullDate(), 0 - (int) (Math.random() * 7200 + 1)));
                         ps.addBatch();
                     }
                 }

@@ -6,6 +6,7 @@ import com.reptile.dao.UserDao;
 import com.reptile.dao.UserHeartDao;
 import com.reptile.dao.UserReptileDao;
 import com.reptile.entity.*;
+import com.reptile.utils.DateUtils;
 import com.reptile.utils.HttpUtils;
 import com.reptile.utils.JdbcUtils;
 import org.apache.commons.lang.StringUtils;
@@ -83,7 +84,7 @@ public class ReptileUserData {
         UserHeartDao.updateSzUserHeartData(userList, conn);
         // 更新活动数据
         ActivityDao.insertUserActivityData(addUserName(list, userList), conn);
-
+        // 更新数据
         JdbcUtils.execute(conn, "update user set  city = '深圳市'  where  city = '深圳' ");
         JdbcUtils.execute(conn, "update activity set  city = '深圳市'  where  city = '深圳' ");
         JdbcUtils.execute(conn, "update user_heart set  city = '深圳市'  where  city = '深圳' ");
