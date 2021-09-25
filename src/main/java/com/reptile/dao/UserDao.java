@@ -20,9 +20,9 @@ public class UserDao {
      * @param conn
      * @return
      */
-    public static List<UserEntity> getSZUserList(Connection conn) {
+    public static List<UserEntity> getUserList(Connection conn, String city) {
         try {
-            String sql = "select  username,wechat_account weChat from  user  where  city like'%深圳%'  and phone is null";
+            String sql = "select  username,wechat_account weChat from  user  where  city like'%'" + city + "'%'  and phone is null";
             List<UserEntity> list = (List<UserEntity>) new QueryRunner().query(conn, sql, new BeanListHandler(UserEntity.class));
             return list;
         } catch (SQLException e) {

@@ -6,7 +6,6 @@ import com.reptile.dao.UserDao;
 import com.reptile.dao.UserHeartDao;
 import com.reptile.dao.UserReptileDao;
 import com.reptile.entity.*;
-import com.reptile.utils.DateUtils;
 import com.reptile.utils.HttpUtils;
 import com.reptile.utils.JdbcUtils;
 import org.apache.commons.lang.StringUtils;
@@ -28,6 +27,10 @@ public class ReptileUserData {
     public static String city = "深圳";
 
     public static void main(String[] args) throws Exception {
+        // 初始化城市和经纬度
+        Map<String, String> myMap = new HashMap<String, String>();
+        myMap.put("深圳", "22.547456_114.085947");
+
         Connection conn = JdbcUtils.getBoomConnection();
         List<UserReptileEntity> allUserList = UserReptileDao.getAllUserList(conn);
 
@@ -80,8 +83,8 @@ public class ReptileUserData {
         UserDao.insertUserData(list, conn);
         JdbcUtils.execute(conn, "update user set  username = concat('a',100000 + id)  where username is null ");
         // 更新用户心跳数据
-        List<UserEntity> userList = UserDao.getSZUserList(conn);
-        UserHeartDao.updateSzUserHeartData(userList, conn);
+        List<UserEntity> userList = UserDao.getUserList(conn, city);
+        UserHeartDao.updateSzUserHeartData(userList, city,myMap, conn);
         // 更新活动数据
         ActivityDao.insertUserActivityData(addUserName(list, userList), conn);
         // 更新数据
