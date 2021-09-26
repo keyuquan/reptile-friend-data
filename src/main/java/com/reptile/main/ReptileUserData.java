@@ -84,7 +84,7 @@ public class ReptileUserData {
         JdbcUtils.execute(conn, "update user set  username = concat('a',100000 + id)  where username is null ");
         // 更新用户心跳数据
         List<UserEntity> userList = UserDao.getUserList(conn, city);
-        UserHeartDao.updateSzUserHeartData(userList, city,myMap, conn);
+        UserHeartDao.updateUserHeartData(userList, city,myMap, conn);
         // 更新活动数据
         ActivityDao.insertUserActivityData(addUserName(list, userList), conn);
         // 更新数据

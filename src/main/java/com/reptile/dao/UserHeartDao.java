@@ -20,11 +20,11 @@ public class UserHeartDao {
      * @param conn
      * @throws Exception
      */
-    public static void updateSzUserHeartData(List<UserEntity> list, String city,  Map<String, String> myMap, Connection conn) throws Exception {
+    public static void updateUserHeartData(List<UserEntity> list, String city,  Map<String, String> myMap, Connection conn) throws Exception {
 
         String s = myMap.get(city);
-        Double m = Double.valueOf(s.split(s)[0]);
-        Double n = Double.valueOf(s.split(s)[1]);
+        Double m = Double.valueOf(s.split("_")[0]);
+        Double n = Double.valueOf(s.split("_")[1]);
 
         String sql = "insert into  user_heart(username,city,latitude,longitude)  values (?,?,?,?) on  duplicate key update  city=?,latitude=?,longitude=?";
         if (list != null && list.size() > 0) {

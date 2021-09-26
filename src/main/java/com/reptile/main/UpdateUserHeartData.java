@@ -14,10 +14,10 @@ import java.util.List;
 public class UpdateUserHeartData {
 
     public static void main(String[] args) throws Exception {
-        Connection conn = JdbcUtils.getBoomConnection();
-        List<UserEntity> userList = UserDao.getSZUserList(conn);
-        UserHeartDao.updateSzUserHeartData(userList, conn);
-        JdbcUtils.closeBoom();
+//        Connection conn = JdbcUtils.getBoomConnection();
+//        List<UserEntity> userList = UserDao.getSZUserList(conn);
+//        UserHeartDao.updateSzUserHeartData(userList, conn);
+//        JdbcUtils.closeBoom();
     }
 
 
