@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    public static String token = "5e895db913d4ee465cbbe1377631b750";
+    public static String token = "20db696b907c94d50cf5264bef75132b";
     public static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
     public static String city = "深圳";
 

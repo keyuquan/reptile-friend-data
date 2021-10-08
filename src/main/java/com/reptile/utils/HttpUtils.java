@@ -6,12 +6,17 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,6 +107,54 @@ public class HttpUtils {
                 uriBuilder.setParameter(key, new JSONObject(map).getString(key));
             }
             httpEntity.setURI(uriBuilder.build());
+            response = client.execute(httpEntity);
+            if (response != null) {
+                String entity = EntityUtils.toString(response.getEntity(), "GBK");
+                JSONObject json = JSONObject.parseObject(entity);
+                return json.toString();
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (response != null) {
+                    response.close();
+                }
+                if (client != null) {
+                    client.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+    /**
+     * 发送 POST 请求
+     *
+     * @param url
+     * @param map
+     * @return
+     */
+    public static String doPost(String url, Map<String, Object> map, String accessToken) {
+        // 构造请求
+        HttpEntityEnclosingRequestBase httpEntity = new HttpEntityEnclosingRequestBase() {
+            @Override
+            public String getMethod() {
+                return "POST";
+            }
+        };
+        if (StringUtils.isNotEmpty(accessToken)) {
+            httpEntity.setHeader("Access-Token", accessToken);
+        }
+        CloseableHttpResponse response = null;
+        CloseableHttpClient client = null;
+        try {
+            client = HttpClientBuilder.create().build();
+            httpEntity.setURI(URI.create(url));
+            httpEntity.setEntity(new StringEntity(JSONObject.toJSONString(map), ContentType.APPLICATION_JSON));
             response = client.execute(httpEntity);
             if (response != null) {
                 String entity = EntityUtils.toString(response.getEntity(), "GBK");
