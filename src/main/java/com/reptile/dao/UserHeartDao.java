@@ -2,11 +2,9 @@ package com.reptile.dao;
 
 import com.reptile.entity.UserEntity;
 
-import java.awt.geom.Arc2D;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -25,8 +23,7 @@ public class UserHeartDao {
         String s = myMap.get(city);
         Double m = Double.valueOf(s.split("_")[0]);
         Double n = Double.valueOf(s.split("_")[1]);
-
-        String sql = "insert into  user_heart(username,city,latitude,longitude)  values (?,?,?,?) on  duplicate key update  city=?,latitude=?,longitude=?";
+        String sql="update   user set  city=?,latitude=?,longitude=? where  username=?";
         if (list != null && list.size() > 0) {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.clearBatch();
@@ -34,14 +31,11 @@ public class UserHeartDao {
                 UserEntity user = list.get(i);
                 double a = new BigDecimal(m + new Random().nextDouble()).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
                 double b = new BigDecimal(n + new Random().nextDouble() * 2).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
-                System.out.println(user.getUsername() + "|" + "深圳" + "|" + a + "|" + b);
-                ps.setObject(1, user.getUsername());
-                ps.setObject(2, "深圳");
-                ps.setObject(3, a);
-                ps.setObject(4, b);
-                ps.setObject(5, "深圳");
-                ps.setObject(6, a);
-                ps.setObject(7, b);
+                System.out.println(user.getUsername() + "|" + city + "|" + a + "|" + b);
+                ps.setObject(1, city);
+                ps.setObject(2, a);
+                ps.setObject(3, b);
+                ps.setObject(4, user.getUsername());
                 ps.addBatch();
             }
             ps.executeBatch();

@@ -18,11 +18,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 爬取有伴的数
+ * 爬取 app 的数据
  */
 public class ReptileUserData {
 
-    public static String token = "20db696b907c94d50cf5264bef75132b";
+    public static String token = "2a2a2d9e149ab86539c50769ec25f880";
     public static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
     public static String city = "深圳";
 
@@ -84,13 +84,12 @@ public class ReptileUserData {
         JdbcUtils.execute(conn, "update user set  username = concat('a',100000 + id)  where username is null ");
         // 更新用户心跳数据
         List<UserEntity> userList = UserDao.getUserList(conn, city);
-        UserHeartDao.updateUserHeartData(userList, city,myMap, conn);
+        UserHeartDao.updateUserHeartData(userList, city, myMap, conn);
         // 更新活动数据
         ActivityDao.insertUserActivityData(addUserName(list, userList), conn);
         // 更新数据
         JdbcUtils.execute(conn, "update user set  city = '深圳市'  where  city = '深圳' ");
         JdbcUtils.execute(conn, "update activity set  city = '深圳市'  where  city = '深圳' ");
-        JdbcUtils.execute(conn, "update user_heart set  city = '深圳市'  where  city = '深圳' ");
         JdbcUtils.closeBoom();
     }
 
