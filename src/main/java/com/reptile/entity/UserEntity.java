@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class UserEntity {
+    Integer id;
     String username;
     String weChat;
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.reptile.entity.UserData;
 import com.reptile.entity.UserEntity;
 import com.reptile.utils.DateUtils;
+import com.reptile.utils.FileDownloadUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
@@ -22,7 +23,7 @@ public class UserDao {
      */
     public static List<UserEntity> getUserList(Connection conn, String city) {
         try {
-            String sql = "select  username,wechat_account weChat from  user  where  city like'%" + city + "%'  and phone is null";
+            String sql = "select id, username,wechat_account weChat from  user  where  city like'%" + city + "%'  and phone is null";
             List<UserEntity> list = (List<UserEntity>) new QueryRunner().query(conn, sql, new BeanListHandler(UserEntity.class));
             return list;
         } catch (SQLException e) {
@@ -47,12 +48,20 @@ public class UserDao {
             for (int i = 0; i < list.size(); i++) {
                 UserData.DataDTO user = list.get(i);
                 ps.setObject(1, user.getNickName());
-                ps.setObject(2, user.getAvatar());
+                ps.setObject(2, user.getAvatar().replace("https://dating-1256663796.file.myqcloud.com/avatar/", "https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/heads/"));
+                FileDownloadUtil.downloadHttpUrl(user.getAvatar(), "head");
                 ps.setObject(3, user.getSex() - 1);
                 ps.setObject(4, DateUtils.addDay(DateUtils.getSysDate(), (0 - user.getAge()) * 365));
                 ps.setObject(5, user.getHeight());
                 ps.setObject(6, 48);
-                ps.setObject(7, JSONObject.toJSONString(user.getPhotoList()));
+                List<String> photoList = user.getPhotoList();
+                for (int j = 0; j < photoList.size(); j++) {
+                    FileDownloadUtil.downloadHttpUrl(photoList.get(j), "pic");
+                }
+                ps.setObject(7, JSONObject.toJSONString(user.getPhotoList())
+                        .replaceAll("https://dating-1256663796.file.myqcloud.com/dating/", "https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/")
+                        .replaceAll("https://dating-1256663796.file.myqcloud.com/report/", "https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/")
+                        .replaceAll("https://dating-1256663796.cos.ap-shanghai.myqcloud.com/photo/", "https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/"));
                 ps.setObject(8, 1);
                 ps.setObject(9, "2030-11-01");
                 ps.setObject(10, user.getLocation());

@@ -23,7 +23,7 @@ public class UserHeartDao {
         String s = myMap.get(city);
         Double m = Double.valueOf(s.split("_")[0]);
         Double n = Double.valueOf(s.split("_")[1]);
-        String sql="update   user set  city=?,latitude=?,longitude=? where  username=?";
+        String sql="update   user set  city=?,latitude=?,longitude=? where  id=?";
         if (list != null && list.size() > 0) {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.clearBatch();
@@ -31,11 +31,11 @@ public class UserHeartDao {
                 UserEntity user = list.get(i);
                 double a = new BigDecimal(m + new Random().nextDouble()).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
                 double b = new BigDecimal(n + new Random().nextDouble() * 2).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
-                System.out.println(user.getUsername() + "|" + city + "|" + a + "|" + b);
+                System.out.println(user.getId() + "|" + city + "|" + a + "|" + b);
                 ps.setObject(1, city);
                 ps.setObject(2, a);
                 ps.setObject(3, b);
-                ps.setObject(4, user.getUsername());
+                ps.setObject(4, user.getId());
                 ps.addBatch();
             }
             ps.executeBatch();

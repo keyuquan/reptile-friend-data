@@ -23,6 +23,8 @@ public class UserData {
         private   List<UserActivityData.DataDTO> activity ;
         @JsonProperty("username")
         private String username;
+        @JsonProperty("UserId2")
+        private Integer UserId2;
         @JsonProperty("show_wechat")
         private Integer showWechat;
         @JsonProperty("distance")

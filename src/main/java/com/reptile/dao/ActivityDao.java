@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.reptile.entity.UserActivityData;
 import com.reptile.entity.UserData;
 import com.reptile.utils.DateUtils;
+import com.reptile.utils.FileDownloadUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public class ActivityDao {
     public static void insertUserActivityData(List<UserData.DataDTO> list, Connection conn) throws Exception {
-        String sql = "insert into  activity(type,username,city,dest_type,time_type,time,instr,images,status,create_time) values (?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into  activity(type,user_id,city,dest_type,time_type,time,instr,images,status,create_time) values (?,?,?,?,?,?,?,?,?,?)";
         if (list != null && list.size() > 0) {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.clearBatch();
@@ -30,7 +31,7 @@ public class ActivityDao {
 
                         Integer timeType = (int) (Math.random() * 2 + 1);
                         ps.setObject(1, type);
-                        ps.setObject(2, dataDTO.getUsername());
+                        ps.setObject(2, dataDTO.getUserId());
                         ps.setObject(3, dataDTO.getLocation());
                         ps.setObject(4, destType);
                         ps.setObject(5, timeType);
@@ -40,7 +41,8 @@ public class ActivityDao {
                         List<UserActivityData.DataDTO.PhotoDTO> photo = dataDTO1.getPhoto();
                         List<String> listPhoto = new ArrayList<String>();
                         for (int k = 0; k < photo.size(); k++) {
-                            listPhoto.add(photo.get(k).getUrl());
+                            listPhoto.add(photo.get(k).getUrl().replace("https://dating-1256663796.file.myqcloud.com/dating/", "https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/").replace("https://dating-1256663796.file.myqcloud.com/report/", "https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/"));
+                            FileDownloadUtil.downloadHttpUrl(photo.get(k).getUrl(), "pic");
                         }
                         ps.setObject(8, JSONObject.toJSONString(listPhoto));
                         ps.setObject(9, 1);
