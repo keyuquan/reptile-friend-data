@@ -52,7 +52,7 @@ public class UserDao {
                 UserData.DataDTO user = list.get(i);
                 ps.setObject(1, user.getNickName());
                 ps.setObject(2, user.getAvatar().replace("https://dating-1256663796.file.myqcloud.com/avatar/", "https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/heads/"));
-                FileDownloadUtil.downloadHttpUrl(user.getAvatar(), "head");
+                FileDownloadUtil.downloadHttpUrl(user.getAvatar(), "heads");
                 ps.setObject(3, user.getSex() - 1);
                 ps.setObject(4, DateUtils.addDay(DateUtils.getSysDate(), (0 - user.getAge()) * 365));
                 ps.setObject(5, user.getHeight());

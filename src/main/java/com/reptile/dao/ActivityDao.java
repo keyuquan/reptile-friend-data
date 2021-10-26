@@ -1,13 +1,18 @@
 package com.reptile.dao;
 
 import com.alibaba.fastjson.JSONObject;
+import com.reptile.entity.ActivityEntity;
 import com.reptile.entity.UserActivityData;
 import com.reptile.entity.UserData;
 import com.reptile.utils.DateUtils;
 import com.reptile.utils.FileDownloadUtil;
+import com.reptile.utils.JdbcUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +46,10 @@ public class ActivityDao {
                         List<UserActivityData.DataDTO.PhotoDTO> photo = dataDTO1.getPhoto();
                         List<String> listPhoto = new ArrayList<String>();
                         for (int k = 0; k < photo.size(); k++) {
-                            listPhoto.add(photo.get(k).getUrl().replace("https://dating-1256663796.file.myqcloud.com/dating/", "https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/").replace("https://dating-1256663796.file.myqcloud.com/report/", "https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/"));
+                            listPhoto.add(photo.get(k).getUrl()
+                                    .replaceAll("https://dating-1256663796.file.myqcloud.com/dating/", "https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/")
+                                    .replaceAll("https://dating-1256663796.file.myqcloud.com/report/", "https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/")
+                                    .replaceAll("https://dating-1256663796.cos.ap-shanghai.myqcloud.com/photo/", "https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/"));
                             FileDownloadUtil.downloadHttpUrl(photo.get(k).getUrl(), "pic");
                         }
                         ps.setObject(8, JSONObject.toJSONString(listPhoto));
@@ -55,4 +63,48 @@ public class ActivityDao {
             ps.close();
         }
     }
+
+
+    /**
+     * 获取深圳的虚拟客户
+     *
+     * @param conn
+     * @return
+     */
+    public static List<ActivityEntity> getActivityList(Connection conn) {
+        try {
+            String sql = "SELECT  images  from  activity where  images  is  not null";
+            List<ActivityEntity> list = (List<ActivityEntity>) new QueryRunner().query(conn, sql, new BeanListHandler(ActivityEntity.class));
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        Connection conn = JdbcUtils.getBoomConnection();
+        List<ActivityEntity> list = getActivityList(conn);
+
+        for (int i = 0; i < list.size(); i++) {
+            ActivityEntity activityEntity = list.get(i);
+            String images = activityEntity.getImages();
+            ArrayList arrayList = JSONObject.parseObject(images, ArrayList.class);
+
+
+            for (int j = 0; j < arrayList.size(); j++) {
+                String s = arrayList.get(j).toString();
+
+                String s2 = s.replaceAll("https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/", "https://dating-1256663796.file.myqcloud.com/dating/");
+                String s3 = s.replaceAll("https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/", "https://dating-1256663796.file.myqcloud.com/report/");
+                String s4 = s.replaceAll("https://g7-stone.oss-cn-guangzhou.aliyuncs.com/uploads/pic/", "https://dating-1256663796.cos.ap-shanghai.myqcloud.com/photo/");
+
+                FileDownloadUtil.downloadHttpUrl(s2, "pic");
+                FileDownloadUtil.downloadHttpUrl(s3, "pic");
+                FileDownloadUtil.downloadHttpUrl(s4, "pic");
+            }
+        }
+
+    }
+
 }
