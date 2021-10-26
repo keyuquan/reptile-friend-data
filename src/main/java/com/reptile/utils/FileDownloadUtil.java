@@ -30,6 +30,29 @@ public class FileDownloadUtil {
         }
     }
 
+    /**
+     * 下载文件---返回下载后的文件存储路径
+     *
+     * @param url      文件路径
+     * @param dir      目标存储目录
+     * @return
+     */
+    public static void downloadHttpUrl(String url, String dir,Integer userId) {
+        try {
+            URL httpurl = new URL(url);
+            File dirfile = new File(dir);
+            if (!dirfile.exists()) {
+                dirfile.mkdirs();
+            }
+            FileUtils.copyURLToFile(httpurl, new File(dir + "/" + url.substring(url.lastIndexOf("/") + 1)));
+        } catch (MalformedURLException e) {
+            System.out.println("---"+userId);
+        } catch (IOException e) {
+            System.out.println("---"+userId);
+        }
+    }
+
+
     public static boolean deleteFile(String dir, String fileName) {
         File file = new File(dir + fileName);
         if (file.exists()) {

@@ -7,4 +7,6 @@ public class UserEntity {
     Integer id;
     String username;
     String weChat;
+    String avatarurl;
+    String photos;
 }
