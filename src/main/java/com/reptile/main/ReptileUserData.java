@@ -65,7 +65,7 @@ public class ReptileUserData {
                                 userMsg.setActivity(userActivity);
                                 list.add(userMsg);
                                 UserReptileDao.insert(conn, Integer.valueOf(userId));
-                                if (list.size() >= 2) {
+                                if (list.size() >= 10) {
                                     break;
                                 }
                             }
@@ -73,7 +73,7 @@ public class ReptileUserData {
                     }
                 }
             }
-            if (list.size() >= 2) {
+            if (list.size() >= 10) {
                 break;
             }
         }
