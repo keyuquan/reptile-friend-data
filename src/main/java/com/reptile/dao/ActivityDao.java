@@ -36,7 +36,7 @@ public class ActivityDao {
 
                         Integer timeType = (int) (Math.random() * 2 + 1);
                         ps.setObject(1, type);
-                        ps.setObject(2, dataDTO.getUserId());
+                        ps.setObject(2, dataDTO.getUserId2());
                         ps.setObject(3, dataDTO.getLocation());
                         ps.setObject(4, destType);
                         ps.setObject(5, timeType);
