@@ -22,16 +22,15 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    public static String token = "473bcc289e7432419a35fbf7d2681af7";
+    public static String token = "57aaef3b898dac1bccac2e2011661730";
     public static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
-    public static String city = "深圳";
+    public static String city = "广州";
 
     public static void main(String[] args) throws Exception {
         // 初始化城市和经纬度
         Map<String, String> myMap = new HashMap<String, String>();
         myMap.put("深圳", "22.547456_114.085947");
-
-        myMap.put("广州", "22.547456_112.085947");
+        myMap.put("广州", "22.647456_112.085947");
         Connection conn = JdbcUtils.getBoomConnection();
         List<UserReptileEntity> allUserList = UserReptileDao.getAllUserList(conn);
 
