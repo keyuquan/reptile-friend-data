@@ -1,6 +1,5 @@
 package com.reptile.dao;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.reptile.entity.UserData;
 import com.reptile.entity.UserEntity;
@@ -92,28 +91,6 @@ public class UserDao {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        Connection conn = JdbcUtils.getBoomConnection();
-        List<UserEntity> list = getUserList(conn, "深圳");
-
-
-        for (int i = 0; i < list.size(); i++) {
-            UserEntity userEntity = list.get(i);
-            String avatarurl = userEntity.getAvatarurl();
-
-            FileDownloadUtil.downloadHttpUrl(avatarurl, "heads", userEntity.getId());
-
-            String photos = userEntity.getPhotos();
-
-            ArrayList arrayList = JSONObject.parseObject(photos, ArrayList.class);
-
-            for (int j = 0; j < arrayList.size(); j++) {
-                FileDownloadUtil.downloadHttpUrl(arrayList.get(j).toString(), "pic", userEntity.getId());
-            }
-
-
-        }
-    }
 
 
 }

@@ -31,6 +31,7 @@ public class ReptileUserData {
         Map<String, String> myMap = new HashMap<String, String>();
         myMap.put("深圳", "22.547456_114.085947");
 
+        myMap.put("广州", "22.547456_112.085947");
         Connection conn = JdbcUtils.getBoomConnection();
         List<UserReptileEntity> allUserList = UserReptileDao.getAllUserList(conn);
 
@@ -84,9 +85,6 @@ public class ReptileUserData {
         UserHeartDao.updateUserHeartData(userList, city, myMap, conn);
         // 更新活动数据
         ActivityDao.insertUserActivityData(addUserId(list, userList), conn);
-        // 更新数据
-        JdbcUtils.execute(conn, "update user set  city = '深圳市'  where  city = '深圳' ");
-        JdbcUtils.execute(conn, "update activity set  city = '深圳市'  where  city = '深圳' ");
         JdbcUtils.closeBoom();
     }
 
