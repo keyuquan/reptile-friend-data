@@ -24,7 +24,7 @@ public class ReptileUserData {
 
     public static String token = "301f2fb36256aa720b573280102c765a";
     public static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
-    public static String city = "广州";
+    public static String city = "深圳";
 
     public static void main(String[] args) throws Exception {
         // 初始化城市和经纬度
@@ -153,10 +153,10 @@ public class ReptileUserData {
         map.put("h_user_id", userId);
 
         Map<String, Object> header = new HashMap();
-        map.put("alipay", true);
-        map.put("electric-charge", false);
-        map.put("uuid", uuid);
-        map.put("location", "114.085947&22.547456");
+        header.put("alipay", true);
+        header.put("electric-charge", false);
+        header.put("uuid", uuid);
+        header.put("location", "114.085947&22.547456");
 
         String data = HttpUtils.doGet(url, map, token, header);
         UserData data1 = JSONObject.parseObject(data, UserData.class);
@@ -176,10 +176,10 @@ public class ReptileUserData {
         map.put("to_user_id", userId);
 
         Map<String, Object> header = new HashMap();
-        map.put("alipay", true);
-        map.put("electric-charge", false);
-        map.put("uuid", uuid);
-        map.put("location", "114.085947&22.547456");
+        header.put("alipay", true);
+        header.put("electric-charge", false);
+        header.put("uuid", uuid);
+        header.put("location", "114.085947&22.547456");
 
         String data = HttpUtils.doGet(url, map, token, header);
         UserWeChatData userWeChatData = JSONObject.parseObject(data, UserWeChatData.class);
@@ -201,8 +201,8 @@ public class ReptileUserData {
         map.put("page", 1);
 
         Map<String, Object> header = new HashMap();
-        map.put("uuid", uuid);
-        map.put("location", "114.085947&22.547456");
+        header.put("uuid", uuid);
+        header.put("location", "114.085947&22.547456");
 
         String data = HttpUtils.doGet(url, map, token, header);
         UserActivityData data1 = JSONObject.parseObject(data, UserActivityData.class);

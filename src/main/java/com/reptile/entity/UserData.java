@@ -28,7 +28,7 @@ public class UserData {
         @JsonProperty("show_wechat")
         private Integer showWechat;
         @JsonProperty("distance")
-        private Integer distance;
+        private String distance;
         @JsonProperty("signature")
         private String signature;
         @JsonProperty("show_homepage_tip")
