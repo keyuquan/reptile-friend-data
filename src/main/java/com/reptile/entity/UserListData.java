@@ -20,7 +20,7 @@ public class UserListData {
         @com.fasterxml.jackson.annotation.JsonProperty("is_follow")
         private Integer isFollow;
         @com.fasterxml.jackson.annotation.JsonProperty("distance")
-        private Integer distance;
+        private String distance;
         @com.fasterxml.jackson.annotation.JsonProperty("is_vip")
         private Integer isVip;
         @com.fasterxml.jackson.annotation.JsonProperty("sex")

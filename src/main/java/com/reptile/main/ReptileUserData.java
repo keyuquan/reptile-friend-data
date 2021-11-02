@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    public static String token = "57aaef3b898dac1bccac2e2011661730";
+    public static String token = "301f2fb36256aa720b573280102c765a";
     public static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
     public static String city = "广州";
 
@@ -122,17 +122,17 @@ public class ReptileUserData {
      * @return
      */
     public static List<UserListData.DataDTO> getHomeList(int page) {
-        String url = "http://app.lightyeara.cn/api/index/userList";
+        String url = "http://small.onbyway.top/api/index/userList";
         Map<String, Object> map = new HashMap();
         map.put("name", "circle");
-        map.put("city", URLEncoder.encode(city));
+        map.put("city", city);
         map.put("page", page);
         map.put("sort", 0);
         Map<String, Object> header = new HashMap();
-        map.put("alipay", true);
-        map.put("electric-charge", false);
-        map.put("uuid", uuid);
-        map.put("location", "114.085947&22.547456");
+        header.put("alipay", true);
+        header.put("electric-charge", false);
+        header.put("uuid", uuid);
+        header.put("location", "114.424378&22.748955");
 
         String data = HttpUtils.doGet(url, map, token, header);
         UserListData data1 = JSONObject.parseObject(data, UserListData.class);
