@@ -22,9 +22,9 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    public static String token = "301f2fb36256aa720b573280102c765a";
+    public static String token = "2500d9fe2ef4e29c04ac7e00ff9b6d28";
     public static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
-    public static String city = "深圳";
+    public static String city = "广州";
 
     public static void main(String[] args) throws Exception {
         // 初始化城市和经纬度
