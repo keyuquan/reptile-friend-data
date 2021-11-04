@@ -10,7 +10,6 @@ import com.reptile.utils.HttpUtils;
 import com.reptile.utils.JdbcUtils;
 import org.apache.commons.lang.StringUtils;
 
-import java.net.URLEncoder;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +21,7 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    public static String token = "2500d9fe2ef4e29c04ac7e00ff9b6d28";
+    public static String token = "2cbb0f946b7d8b6f85dda8cc341fb981";
     public static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
     public static String city = "广州";
 
