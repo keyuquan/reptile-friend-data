@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class UserEntity {
-    Integer id;
-    String username;
+    Integer uid;
+    String name;
     String weChat;
-    String avatarurl;
+    String icon;
     String photos;
 }

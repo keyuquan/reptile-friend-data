@@ -14,6 +14,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -72,6 +73,7 @@ public class HttpUtils {
         }
         return null;
     }
+
     /**
      * 发送 get 请求: 参数形式: url?name
      *
@@ -89,7 +91,7 @@ public class HttpUtils {
         if (StringUtils.isNotEmpty(accessToken)) {
             httpEntity.setHeader("token", accessToken);
         }
-        if (header.size()>0){
+        if (header.size() > 0) {
             for (String key : header.keySet()) {
                 httpEntity.setHeader(key, new JSONObject(header).getString(key));
             }
@@ -127,6 +129,7 @@ public class HttpUtils {
         }
         return null;
     }
+
     /**
      * 发送 POST 请求
      *
@@ -174,6 +177,16 @@ public class HttpUtils {
             }
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+        String url = "http://8.129.168.160:10000/auth/user_token";
+        Map map = new HashMap();
+        map.put("secret", "tuoyun");
+        map.put("platform", 1);
+        map.put("uid", "18818406784");
+        String s = doPost(url, map, null);
+        System.out.println(s);
     }
 
 

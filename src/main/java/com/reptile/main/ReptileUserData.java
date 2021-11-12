@@ -21,15 +21,17 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    public static String token = "2cbb0f946b7d8b6f85dda8cc341fb981";
+    public static String token = "c035add9b16e5d1a31d800d05f3d5c0a";
     public static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
-    public static String city = "广州";
+    public static String city = "上海";
 
     public static void main(String[] args) throws Exception {
         // 初始化城市和经纬度
         Map<String, String> myMap = new HashMap<String, String>();
         myMap.put("深圳", "22.547456_114.085947");
         myMap.put("广州", "22.647456_112.085947");
+        myMap.put("东莞", "23.447456_114.000001");
+        myMap.put("上海", "31.227456_121.480001");
         Connection conn = JdbcUtils.getBoomConnection();
         List<UserReptileEntity> allUserList = UserReptileDao.getAllUserList(conn);
 
@@ -64,7 +66,7 @@ public class ReptileUserData {
                                 userMsg.setActivity(userActivity);
                                 list.add(userMsg);
                                 UserReptileDao.insert(conn, Integer.valueOf(userId));
-                                if (list.size() >= 10) {
+                                if (list.size() >= 1) {
                                     break;
                                 }
                             }
@@ -72,7 +74,7 @@ public class ReptileUserData {
                     }
                 }
             }
-            if (list.size() >= 10) {
+            if (list.size() >= 1) {
                 break;
             }
         }
@@ -93,7 +95,7 @@ public class ReptileUserData {
             for (int j = 0; j < userList.size(); j++) {
                 UserEntity userEntity = userList.get(j);
                 if (dataDTO.getWechat().equals(userEntity.getWeChat())) {
-                    dataDTO.setUserId2(userList.get(j).getId());
+                    dataDTO.setUserId2(userList.get(j).getUid());
                     list2.add(dataDTO);
                 }
             }
