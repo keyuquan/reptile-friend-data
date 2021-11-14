@@ -94,7 +94,6 @@ public class ActivityDao {
             String images = activityEntity.getImages();
             ArrayList arrayList = JSONObject.parseObject(images, ArrayList.class);
 
-
             for (int j = 0; j < arrayList.size(); j++) {
                 String s = arrayList.get(j).toString();
 
