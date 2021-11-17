@@ -23,7 +23,7 @@ public class UserDao {
      */
     public static List<UserEntity> getUserList(Connection conn, String city) {
         try {
-            String sql = "select uid , name,wechat_account weChat from  user  where  city like'%" + city + "%'  and mobile is null";
+            String sql = "select uid , name,we_chat_account weChat from  user  where  city like'%" + city + "%'  and mobile is null";
             List<UserEntity> list = (List<UserEntity>) new QueryRunner().query(conn, sql, new BeanListHandler(UserEntity.class));
             return list;
         } catch (SQLException e) {
@@ -41,7 +41,7 @@ public class UserDao {
      * @throws Exception
      */
     public static void insertUserData(List<UserData.DataDTO> list, Connection conn) throws Exception {
-        String sql = "insert  into  user (name,icon,gender,birth,height,weight,photos,vip_level,vip_end,city,self_desc,profession,salary_year,wechat_account,flags,create_time) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert  into  user (name,icon,gender,birth,height,weight,photos,vip_level,vip_end,city,self_desc,profession,salary_year,we_chat_account,flags,create_time) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         if (list != null && list.size() > 0) {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.clearBatch();

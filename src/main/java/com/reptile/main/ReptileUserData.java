@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    public static String token = "85da541b1ca3f34e11bd95263a98e7b8";
+    public static String token = "5e4fdb80c40df547641d1cd993f5a017";
     public static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
     public static String city = "北京";
 
@@ -67,7 +67,7 @@ public class ReptileUserData {
                                 userMsg.setActivity(userActivity);
                                 list.add(userMsg);
                                 UserReptileDao.insert(conn, Integer.valueOf(userId));
-                                if (list.size() >= 10) {
+                                if (list.size() >= 6) {
                                     break;
                                 }
                             }
@@ -75,7 +75,7 @@ public class ReptileUserData {
                     }
                 }
             }
-            if (list.size() >= 10) {
+            if (list.size() >= 6) {
                 break;
             }
         }
