@@ -23,7 +23,7 @@ public class ReptileUserData {
 
     public static String token = "5e4fdb80c40df547641d1cd993f5a017";
     public static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
-    public static String city = "北京";
+    public static String city = "杭州";
 
     public static void main(String[] args) throws Exception {
         // 初始化城市和经纬度
@@ -33,6 +33,7 @@ public class ReptileUserData {
         myMap.put("东莞", "23.447456_114.000001");
         myMap.put("上海", "31.227456_121.480001");
         myMap.put("北京", "39.567456_116.200001");
+        myMap.put("杭州", "30.227456_118.480001");
         Connection conn = JdbcUtils.getBoomConnection();
         List<UserReptileEntity> allUserList = UserReptileDao.getAllUserList(conn);
 
@@ -67,7 +68,7 @@ public class ReptileUserData {
                                 userMsg.setActivity(userActivity);
                                 list.add(userMsg);
                                 UserReptileDao.insert(conn, Integer.valueOf(userId));
-                                if (list.size() >= 6) {
+                                if (list.size() >= 10) {
                                     break;
                                 }
                             }
@@ -75,7 +76,7 @@ public class ReptileUserData {
                     }
                 }
             }
-            if (list.size() >= 6) {
+            if (list.size() >= 10) {
                 break;
             }
         }
