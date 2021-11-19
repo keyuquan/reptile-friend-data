@@ -21,9 +21,9 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    public static String token = "5e4fdb80c40df547641d1cd993f5a017";
-    public static String uuid = "3ebdd9b4713102643a352fbf0994eae6";
-    public static String city = "杭州";
+    public static String token = "87afdf3685c16c69f7ea9ba09a6c286b";
+    public static String uuid = "9a356bc94622811290b27f482181bfb5";
+    public static String city = "成都";
 
     public static void main(String[] args) throws Exception {
         // 初始化城市和经纬度
@@ -34,6 +34,7 @@ public class ReptileUserData {
         myMap.put("上海", "31.227456_121.480001");
         myMap.put("北京", "39.567456_116.200001");
         myMap.put("杭州", "30.227456_118.480001");
+        myMap.put("成都", "30.227456_103.480001");
         Connection conn = JdbcUtils.getBoomConnection();
         List<UserReptileEntity> allUserList = UserReptileDao.getAllUserList(conn);
 
