@@ -21,10 +21,10 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    public static String token = "4328d69059d5b29ce205c252ff2cc0d4";
+    public static String token = "0566707ceecc94c868e0b673efd39baa";
     public static String uuid = "9a356bc94622811290b27f482181bfb5";
-    public static String city = "长沙";
-    public static Integer reptileUserCount = 10;
+    public static String city = "惠州";
+    public static Integer reptileUserCount = 8;
 
     public static void main(String[] args) throws Exception {
         // 初始化城市和经纬度
@@ -41,6 +41,8 @@ public class ReptileUserData {
         myMap.put("厦门", "23.527456_118.380001");
         myMap.put("武汉", "30.527456_114.380001");
         myMap.put("长沙", "28.027456_112.380001");
+        myMap.put("襄阳", "32.047456_112.085947");
+        myMap.put("惠州", "22.047456_114.085947");
         Connection conn = JdbcUtils.getBoomConnection();
         List<UserReptileEntity> allUserList = UserReptileDao.getAllUserList(conn);
 
@@ -52,31 +54,33 @@ public class ReptileUserData {
                 String userId = homeList.get(i).getUserId();
                 if (!isContain(allUserList, userId)) {
                     UserData.DataDTO userMsg = getUserMsg(userId);
-                    List<String> datingList = userMsg.getDatingList();
-                    List<String> photoList = userMsg.getPhotoList();
-                    if (photoList != null && photoList.size() > 0) {
-                        if (datingList != null && datingList.size() > 0) {
-                            // 过滤掉没有活动的数据
-                            System.out.println(userMsg.getUserId() + " showWechat == " + userMsg.getShowWechat() + " wechat == " + userMsg.getWechat());
-                            String weChat = "";
-                            if (userMsg.getShowWechat() == 2) {
-                                // 直接显示微信
-                                weChat = userMsg.getWechat();
-                            } else if (userMsg.getShowWechat() == 1) {
-                                // 显示微信，但是需要请求
-                                UserWeChatData.DataDTO userWeChat = getUserWeChat(userId).getData();
-                                if (userWeChat != null) {
-                                    weChat = userWeChat.getWechat();
-                                    userMsg.setWechat(weChat);
+                    if (userMsg != null) {
+                        List<String> datingList = userMsg.getDatingList();
+                        List<String> photoList = userMsg.getPhotoList();
+                        if (photoList != null && photoList.size() > 0) {
+                            if (datingList != null && datingList.size() > 0) {
+                                // 过滤掉没有活动的数据
+                                System.out.println(userMsg.getUserId() + " showWechat == " + userMsg.getShowWechat() + " wechat == " + userMsg.getWechat());
+                                String weChat = "";
+                                if (userMsg.getShowWechat() == 2) {
+                                    // 直接显示微信
+                                    weChat = userMsg.getWechat();
+                                } else if (userMsg.getShowWechat() == 1) {
+                                    // 显示微信，但是需要请求
+                                    UserWeChatData.DataDTO userWeChat = getUserWeChat(userId).getData();
+                                    if (userWeChat != null) {
+                                        weChat = userWeChat.getWechat();
+                                        userMsg.setWechat(weChat);
+                                    }
                                 }
-                            }
-                            if (StringUtils.isNotBlank(weChat)) {
-                                List<UserActivityData.DataDTO> userActivity = getUserActivity(userId);
-                                userMsg.setActivity(userActivity);
-                                list.add(userMsg);
-                                UserReptileDao.insert(conn, Integer.valueOf(userId));
-                                if (list.size() >= reptileUserCount) {
-                                    break;
+                                if (StringUtils.isNotBlank(weChat)) {
+                                    List<UserActivityData.DataDTO> userActivity = getUserActivity(userId);
+                                    userMsg.setActivity(userActivity);
+                                    list.add(userMsg);
+                                    UserReptileDao.insert(conn, Integer.valueOf(userId));
+                                    if (list.size() >= reptileUserCount) {
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -146,8 +150,8 @@ public class ReptileUserData {
 
         String data = HttpUtils.doGet(url, map, token, header);
         UserListData data1 = JSONObject.parseObject(data, UserListData.class);
-        List<UserListData.DataDTO> list = data1.getData();
         System.out.println(data);
+        List<UserListData.DataDTO> list = data1.getData();
         return list;
     }
 
@@ -171,6 +175,8 @@ public class ReptileUserData {
         String data = HttpUtils.doGet(url, map, token, header);
         UserData data1 = JSONObject.parseObject(data, UserData.class);
         UserData.DataDTO data2 = data1.getData();
+
+        System.out.println(data);
         return data2;
     }
 
@@ -193,7 +199,6 @@ public class ReptileUserData {
 
         String data = HttpUtils.doGet(url, map, token, header);
         UserWeChatData userWeChatData = JSONObject.parseObject(data, UserWeChatData.class);
-        System.out.println(data);
         return userWeChatData;
     }
 
