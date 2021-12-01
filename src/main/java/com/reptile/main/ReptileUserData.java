@@ -23,8 +23,8 @@ public class ReptileUserData {
 
     public static String token = "0566707ceecc94c868e0b673efd39baa";
     public static String uuid = "9a356bc94622811290b27f482181bfb5";
-    public static String city = "惠州";
-    public static Integer reptileUserCount = 8;
+    public static String city = "深圳";
+    public static Integer reptileUserCount = 5;
 
     public static void main(String[] args) throws Exception {
         // 初始化城市和经纬度

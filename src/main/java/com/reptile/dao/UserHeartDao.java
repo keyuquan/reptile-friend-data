@@ -23,7 +23,7 @@ public class UserHeartDao {
         String s = myMap.get(city);
         Double m = Double.valueOf(s.split("_")[0]);
         Double n = Double.valueOf(s.split("_")[1]);
-        String sql = "update   user set  city=?,latitude=?,longitude=? where  uid=?";
+        String sql = "update   user set  city=?,latitude=?,longitude=? where  uid=? and  latitude is  null";
         if (list != null && list.size() > 0) {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.clearBatch();
