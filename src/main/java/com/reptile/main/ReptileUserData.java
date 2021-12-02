@@ -21,9 +21,9 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    public static String token = "0566707ceecc94c868e0b673efd39baa";
+    public static String token = "d06bc87adf582e0135bf05d1d2fd4e25";
     public static String uuid = "9a356bc94622811290b27f482181bfb5";
-    public static String city = "深圳";
+    public static String city = "广州";
     public static Integer reptileUserCount = 5;
 
     public static void main(String[] args) throws Exception {
