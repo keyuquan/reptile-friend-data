@@ -23,7 +23,7 @@ public class UserDao {
      */
     public static List<UserEntity> getUserList(Connection conn, String city) {
         try {
-            String sql = "select uid , name,we_chat_account weChat from  user  where  city like'%" + city + "%'  and mobile is null";
+            String sql = "select uid , name,we_chat_account weChat from  user  where  city like'%" + city + "%'  and mobile is null and  update_time>=DATE_FORMAT(NOW(),'%Y-%m-%d 00:00:00')";
             List<UserEntity> list = (List<UserEntity>) new QueryRunner().query(conn, sql, new BeanListHandler(UserEntity.class));
             return list;
         } catch (SQLException e) {
