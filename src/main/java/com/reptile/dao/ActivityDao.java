@@ -29,6 +29,7 @@ public class ActivityDao {
                 UserData.DataDTO dataDTO = list.get(i);
                 List<UserActivityData.DataDTO> activity = dataDTO.getActivity();
                 if (activity != null && activity.size() > 0) {
+                    boolean isAc = true;
                     for (int j = 0; j < activity.size(); j++) {
                         UserActivityData.DataDTO dataDTO1 = activity.get(j);
                         Integer type = (int) (Math.random() * 4 + 1);
@@ -54,11 +55,11 @@ public class ActivityDao {
                         }
                         ps.setObject(8, JSONObject.toJSONString(listPhoto));
                         ps.setObject(9, 1);
-                        ps.setObject(10, DateUtils.addSecond(DateUtils.getSysFullDate(), 0 - (int) (Math.random() * 3 * 3600 * 24 + 1)));
-                        if (listPhoto.size() > 0) {
+                        ps.setObject(10, DateUtils.addSecond(DateUtils.getSysFullDate(), 0 - (int) (Math.random() * 1 * 3600 * 24 + 1)));
+                        if (listPhoto.size() > 0 && isAc) {
                             ps.addBatch();
+                            isAc = false;
                         }
-
                     }
                 }
             }

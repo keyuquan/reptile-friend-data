@@ -21,10 +21,10 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    public static String token = "d06bc87adf582e0135bf05d1d2fd4e25";
+    public static String token = "eb9aa3f08cac24686323d891e50838f2";
     public static String uuid = "9a356bc94622811290b27f482181bfb5";
-    public static String city = "广州";
-    public static Integer reptileUserCount = 5;
+    public static String city = "深圳";
+    public static Integer reptileUserCount = 4;
 
     public static void main(String[] args) throws Exception {
         // 初始化城市和经纬度
