@@ -24,7 +24,7 @@ public class ReptileUserData {
     public static String token = "eb9aa3f08cac24686323d891e50838f2";
     public static String uuid = "9a356bc94622811290b27f482181bfb5";
     public static String city = "徐州";
-    public static Integer reptileUserCount = 3;
+    public static Integer reptileUserCount = 2;
 
     public static void main(String[] args) throws Exception {
         // 初始化城市和经纬度
@@ -47,58 +47,67 @@ public class ReptileUserData {
         Connection conn = JdbcUtils.getBoomConnection();
         List<UserReptileEntity> allUserList = UserReptileDao.getAllUserList(conn);
 
-        // 1.爬取主页数据
-        List<UserData.DataDTO> list = new ArrayList<UserData.DataDTO>();
-        for (int m = 1; m < 1000; m++) {
-            List<UserListData.DataDTO> homeList = getHomeList(m);
-            for (int i = 0; i < homeList.size(); i++) {
-                String userId = homeList.get(i).getUserId();
-                if (!isContain(allUserList, userId)) {
-                    UserData.DataDTO userMsg = getUserMsg(userId);
-                    if (userMsg != null) {
-                        List<String> datingList = userMsg.getDatingList();
-                        List<String> photoList = userMsg.getPhotoList();
-                        if (photoList != null && photoList.size() > 0) {
-                            if (datingList != null && datingList.size() > 0) {
-                                // 过滤掉没有活动的数据
-                                System.out.println(userMsg.getUserId() + " showWechat == " + userMsg.getShowWechat() + " wechat == " + userMsg.getWechat());
-                                String weChat = "";
-                                if (userMsg.getShowWechat() == 2) {
-                                    // 直接显示微信
-                                    weChat = userMsg.getWechat();
-                                } else if (userMsg.getShowWechat() == 1) {
-                                    // 显示微信，但是需要请求
-                                    UserWeChatData.DataDTO userWeChat = getUserWeChat(userId).getData();
-                                    if (userWeChat != null) {
-                                        weChat = userWeChat.getWechat();
-                                        userMsg.setWechat(weChat);
+        List<String> cityList = new ArrayList();
+        cityList.add("北京");
+        cityList.add("上海");
+        cityList.add("广州");
+        cityList.add("深圳");
+        cityList.add("东莞");
+
+        for (int n = 0; n < cityList.size(); n++) {
+            String city = cityList.get(n);
+            // 1.爬取主页数据
+            List<UserData.DataDTO> list = new ArrayList<UserData.DataDTO>();
+            for (int m = 1; m < 1000; m++) {
+                List<UserListData.DataDTO> homeList = getHomeList(m);
+                for (int i = 0; i < homeList.size(); i++) {
+                    String userId = homeList.get(i).getUserId();
+                    if (!isContain(allUserList, userId)) {
+                        UserData.DataDTO userMsg = getUserMsg(userId);
+                        if (userMsg != null) {
+                            List<String> datingList = userMsg.getDatingList();
+                            List<String> photoList = userMsg.getPhotoList();
+                            if (photoList != null && photoList.size() > 0) {
+                                if (datingList != null && datingList.size() > 0) {
+                                    // 过滤掉没有活动的数据
+                                    String weChat = "";
+                                    if (userMsg.getShowWechat() == 2) {
+                                        // 直接显示微信
+                                        weChat = userMsg.getWechat();
+                                    } else if (userMsg.getShowWechat() == 1) {
+                                        // 显示微信，但是需要请求
+                                        UserWeChatData.DataDTO userWeChat = getUserWeChat(userId).getData();
+                                        if (userWeChat != null) {
+                                            weChat = userWeChat.getWechat();
+                                            userMsg.setWechat(weChat);
+                                        }
                                     }
-                                }
-                                if (StringUtils.isNotBlank(weChat)) {
-                                    List<UserActivityData.DataDTO> userActivity = getUserActivity(userId);
-                                    userMsg.setActivity(userActivity);
-                                    list.add(userMsg);
-                                    UserReptileDao.insert(conn, Integer.valueOf(userId));
-                                    if (list.size() >= reptileUserCount) {
-                                        break;
+                                    if (StringUtils.isNotBlank(weChat)) {
+                                        List<UserActivityData.DataDTO> userActivity = getUserActivity(userId);
+                                        userMsg.setActivity(userActivity);
+                                        list.add(userMsg);
+                                        UserReptileDao.insert(conn, Integer.valueOf(userId));
+                                        if (list.size() >= reptileUserCount) {
+                                            break;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+                if (list.size() >= reptileUserCount) {
+                    break;
+                }
             }
-            if (list.size() >= reptileUserCount) {
-                break;
-            }
+            // 更新用户数据
+            UserDao.insertUserData(list, conn);
+            // 更新用户心跳数据
+            List<UserEntity> userList = UserDao.getUserList(conn, city);
+            UserHeartDao.updateUserHeartData(userList, city, myMap, conn);
+            // 更新活动数据
+            ActivityDao.insertUserActivityData(addUserId(list, userList), conn);
         }
-        // 更新用户数据
-        UserDao.insertUserData(list, conn);
-        // 更新用户心跳数据
-        List<UserEntity> userList = UserDao.getUserList(conn, city);
-        UserHeartDao.updateUserHeartData(userList, city, myMap, conn);
-        // 更新活动数据
-        ActivityDao.insertUserActivityData(addUserId(list, userList), conn);
         JdbcUtils.closeBoom();
     }
 
