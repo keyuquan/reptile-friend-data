@@ -9,7 +9,6 @@ import com.reptile.entity.*;
 import com.reptile.utils.HttpUtils;
 import com.reptile.utils.JdbcUtils;
 import org.apache.commons.lang.StringUtils;
-
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
