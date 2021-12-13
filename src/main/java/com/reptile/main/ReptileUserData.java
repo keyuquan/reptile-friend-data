@@ -22,7 +22,6 @@ public class ReptileUserData {
 
     public static String token = "eb9aa3f08cac24686323d891e50838f2";
     public static String uuid = "9a356bc94622811290b27f482181bfb5";
-    public static String city = "徐州";
     public static Integer reptileUserCount = 2;
 
     public static void main(String[] args) throws Exception {
@@ -57,8 +56,8 @@ public class ReptileUserData {
             String city = cityList.get(n);
             // 1.爬取主页数据
             List<UserData.DataDTO> list = new ArrayList<UserData.DataDTO>();
-            for (int m = 1; m < 1000; m++) {
-                List<UserListData.DataDTO> homeList = getHomeList(m);
+            for (int m = 1; m < 100; m++) {
+                List<UserListData.DataDTO> homeList = getHomeList(m,city);
                 for (int i = 0; i < homeList.size(); i++) {
                     String userId = homeList.get(i).getUserId();
                     if (!isContain(allUserList, userId)) {
@@ -144,7 +143,7 @@ public class ReptileUserData {
      * @param page
      * @return
      */
-    public static List<UserListData.DataDTO> getHomeList(int page) {
+    public static List<UserListData.DataDTO> getHomeList(int page,String city) {
         String url = "http://small.onbyway.top/api/index/userList";
         Map<String, Object> map = new HashMap();
         map.put("name", "circle");
