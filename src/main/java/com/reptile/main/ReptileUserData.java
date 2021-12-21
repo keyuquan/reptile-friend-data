@@ -212,6 +212,7 @@ public class ReptileUserData {
         header.put("location", "114.085947&22.547456");
 
         String data = HttpUtils.doGet(url, map, token, header);
+        System.out.println(data);
         UserWeChatData userWeChatData = JSONObject.parseObject(data, UserWeChatData.class);
         return userWeChatData;
     }
