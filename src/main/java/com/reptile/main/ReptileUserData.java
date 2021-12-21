@@ -56,7 +56,7 @@ public class ReptileUserData {
         cityList.add("厦门");
         cityList.add("武汉");
         cityList.add("长沙");
-        cityList.add("杭州");
+        cityList.add("惠州");
 
         for (int n = 0; n < cityList.size(); n++) {
             String city = cityList.get(n);
