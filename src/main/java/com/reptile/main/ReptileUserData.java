@@ -71,7 +71,7 @@ public class ReptileUserData {
                         if (userMsg != null) {
                             List<String> datingList = userMsg.getDatingList();
                             List<String> photoList = userMsg.getPhotoList();
-                            if (photoList != null && photoList.size() > 0) {
+                            if ((photoList != null && photoList.size() > 0) || (datingList != null && datingList.size() > 0)) {
 
                                 // 过滤掉没有活动的数据
                                 String weChat = "";
