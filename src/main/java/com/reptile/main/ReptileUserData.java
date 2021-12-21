@@ -22,7 +22,7 @@ public class ReptileUserData {
 
     public static String token = "eb9aa3f08cac24686323d891e50838f2";
     public static String uuid = "9a356bc94622811290b27f482181bfb5";
-    public static Integer reptileUserCount = 2;
+    public static Integer reptileUserCount = 1;
 
     public static void main(String[] args) throws Exception {
         // 初始化城市和经纬度
@@ -51,6 +51,11 @@ public class ReptileUserData {
         cityList.add("广州");
         cityList.add("深圳");
         cityList.add("东莞");
+        cityList.add("成都");
+        cityList.add("厦门");
+        cityList.add("武汉");
+        cityList.add("长沙");
+        cityList.add("杭州");
 
         for (int n = 0; n < cityList.size(); n++) {
             String city = cityList.get(n);
