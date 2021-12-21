@@ -9,6 +9,7 @@ import com.reptile.entity.*;
 import com.reptile.utils.HttpUtils;
 import com.reptile.utils.JdbcUtils;
 import org.apache.commons.lang.StringUtils;
+
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +63,7 @@ public class ReptileUserData {
             // 1.爬取主页数据
             List<UserData.DataDTO> list = new ArrayList<UserData.DataDTO>();
             for (int m = 1; m < 100; m++) {
-                List<UserListData.DataDTO> homeList = getHomeList(m,city);
+                List<UserListData.DataDTO> homeList = getHomeList(m, city);
                 for (int i = 0; i < homeList.size(); i++) {
                     String userId = homeList.get(i).getUserId();
                     if (!isContain(allUserList, userId)) {
@@ -71,30 +72,30 @@ public class ReptileUserData {
                             List<String> datingList = userMsg.getDatingList();
                             List<String> photoList = userMsg.getPhotoList();
                             if (photoList != null && photoList.size() > 0) {
-                                if (datingList != null && datingList.size() > 0) {
-                                    // 过滤掉没有活动的数据
-                                    String weChat = "";
-                                    if (userMsg.getShowWechat() == 2) {
-                                        // 直接显示微信
-                                        weChat = userMsg.getWechat();
-                                    } else if (userMsg.getShowWechat() == 1) {
-                                        // 显示微信，但是需要请求
-                                        UserWeChatData.DataDTO userWeChat = getUserWeChat(userId).getData();
-                                        if (userWeChat != null) {
-                                            weChat = userWeChat.getWechat();
-                                            userMsg.setWechat(weChat);
-                                        }
-                                    }
-                                    if (StringUtils.isNotBlank(weChat)) {
-                                        List<UserActivityData.DataDTO> userActivity = getUserActivity(userId);
-                                        userMsg.setActivity(userActivity);
-                                        list.add(userMsg);
-                                        UserReptileDao.insert(conn, Integer.valueOf(userId));
-                                        if (list.size() >= reptileUserCount) {
-                                            break;
-                                        }
+
+                                // 过滤掉没有活动的数据
+                                String weChat = "";
+                                if (userMsg.getShowWechat() == 2) {
+                                    // 直接显示微信
+                                    weChat = userMsg.getWechat();
+                                } else if (userMsg.getShowWechat() == 1) {
+                                    // 显示微信，但是需要请求
+                                    UserWeChatData.DataDTO userWeChat = getUserWeChat(userId).getData();
+                                    if (userWeChat != null) {
+                                        weChat = userWeChat.getWechat();
+                                        userMsg.setWechat(weChat);
                                     }
                                 }
+                                if (StringUtils.isNotBlank(weChat)) {
+                                    List<UserActivityData.DataDTO> userActivity = getUserActivity(userId);
+                                    userMsg.setActivity(userActivity);
+                                    list.add(userMsg);
+                                    UserReptileDao.insert(conn, Integer.valueOf(userId));
+                                    if (list.size() >= reptileUserCount) {
+                                        break;
+                                    }
+                                }
+
                             }
                         }
                     }
@@ -148,7 +149,7 @@ public class ReptileUserData {
      * @param page
      * @return
      */
-    public static List<UserListData.DataDTO> getHomeList(int page,String city) {
+    public static List<UserListData.DataDTO> getHomeList(int page, String city) {
         String url = "http://small.onbyway.top/api/index/userList";
         Map<String, Object> map = new HashMap();
         map.put("name", "circle");
