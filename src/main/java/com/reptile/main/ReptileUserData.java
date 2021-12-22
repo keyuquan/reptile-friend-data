@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class ReptileUserData {
 
-    public static String token = "4c7de86a127edcefd105df0ddd875a51";
+    public static String token = "d5bb99895c23081368dc321ab3a97f49";
     public static String uuid = "9a356bc94622811290b27f482181bfb5";
     public static Integer reptileUserCount = 1;
 
