@@ -55,7 +55,7 @@ public class ActivityDao {
                         }
                         ps.setObject(8, JSONObject.toJSONString(listPhoto));
                         ps.setObject(9, 1);
-                        ps.setObject(10, DateUtils.addSecond(DateUtils.getSysFullDate(), 0 - (int) (Math.random() * 1 * 3600 * 24 + 1)));
+                        ps.setObject(10, DateUtils.addSecond(DateUtils.getSysFullDate(), 0 - (int) (Math.random() * 1 * 3600 + 1)));
                         if (listPhoto.size() > 0 && isAc) {
                             ps.addBatch();
                             isAc = false;

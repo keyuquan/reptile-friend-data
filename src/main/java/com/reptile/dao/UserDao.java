@@ -81,7 +81,7 @@ public class UserDao {
                     }
                 }
                 ps.setObject(15, flag);
-                ps.setObject(16, DateUtils.addSecond(DateUtils.getSysFullDate(), 0 - (int) (Math.random() * 1 * 3600 * 24 + 7201)));
+                ps.setObject(16, DateUtils.addSecond(DateUtils.getSysFullDate(), 0 - (int) (Math.random() * 1 * 3600  + 7201)));
                 ps.addBatch();
             }
             ps.executeBatch();
